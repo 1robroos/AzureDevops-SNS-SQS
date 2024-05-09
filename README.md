@@ -55,4 +55,14 @@ command.
  * `cdk diff`        compare deployed stack with current state
  * `cdk docs`        open CDK documentation
 
+
+## Warnings
+### Write-only properties
+Write-only properties are resource property values that can be written to but can't be read by AWS CloudFormation or CDK Migrate. For more information, see [IaC generator and write-only properties](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/generate-IaC-write-only-properties.html).
+
+
+Write-only properties discovered during migration are organized here by resource ID and categorized by write-only property type. Resolve write-only properties by providing property values in your CDK app. For guidance, see [Resolve write-only properties](https://docs.aws.amazon.com/cdk/v2/guide/migrate.html#migrate-resources-writeonly).
+### EventsEventBus00default00hob1r
+- **UNSUPPORTED_PROPERTIES**: 
+  - EventSourceName: If you are creating a partner event bus, this specifies the partner event source that the new event bus will be matched with.
 Enjoy!
