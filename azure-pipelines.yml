@@ -9,7 +9,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-
 jobs:  
 - job: preps
   displayName: Preparations
@@ -22,8 +21,6 @@ jobs:
   - script: |
       sudo npm install -g aws-cdk
       pip install -r requirements.txt
-      echo list app
-      cdk ls
       #cdk synth
     displayName: 'npm install'
   - script: |
@@ -35,37 +32,21 @@ jobs:
       awsCredentials: 'AWS-SANDBOX'
       regionName: 'eu-central-1'
       scriptType: 'inline'
-      # inlineScript: 'cdk deploy --ci --require-approval never'
       inlineScript: 'cdk diff'
       disableAutoCwd: true
       workingDirectory: '$(System.DefaultWorkingDirectory)'
       failOnStandardError: false
     displayName: 'cdk diff'
 
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'AWS-SANDBOX'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      # inlineScript: 'cdk deploy --ci --require-approval never'
-      inlineScript: 'cdk deploy'
-      disableAutoCwd: true
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-      failOnStandardError: false
-    displayName: 'cdk deploy'
-
-
-  
-
-- job: doSomething
-  displayName: Do Something
-  steps:
-    - script: echo Hello, world!
-      displayName: 'Run a one-line script'
+# - job: doSomething
+#   displayName: Do Something
+#   steps:
+#     - script: echo Hello, world!
+#       displayName: 'Run a one-line script'
   
 - job: waitForValidation
   displayName: wait for external validation
-  dependsOn: doSomething
+  dependsOn: preps
   pool: server
   timeoutInMinutes: 3600
   steps:
@@ -79,6 +60,17 @@ jobs:
   dependsOn: waitforValidation
   steps:
   - script: echo Validation Completed!
-    displayName: 'Run a one-line script'
+    displayName: 'Run cdk deploy'
+  - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'AWS-SANDBOX'
+      regionName: 'eu-central-1'
+      scriptType: 'inline'
+      inlineScript: 'cdk deploy'
+      disableAutoCwd: true
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+      failOnStandardError: false
+    displayName: 'cdk deploy'
+
 
     
