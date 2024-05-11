@@ -10,12 +10,12 @@ class MySnsTopicWithSqsdlqStack(Stack):
     super().__init__(scope, construct_id, **kwargs)
 
     # Resources
-    eventsEventBus00default00hob1r = events.CfnEventBus(self, 'EventsEventBus00default00hob1r',
-          tags = [
-          ],
-          name = 'default',
-        )
-    eventsEventBus00default00hob1r.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
+    # eventsEventBus00default00hob1r = events.CfnEventBus(self, 'EventsEventBus00default00hob1r',
+    #       tags = [
+    #       ],
+    #       name = 'default',
+    #     )
+    # eventsEventBus00default00hob1r.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
 
     sqsQueue00SnsSubscriptionSendFailure0087EhT = sqs.CfnQueue(self, 'SQSQueue00SNSSubscriptionSendFailure0087EhT',
           sqs_managed_sse_enabled = True,
@@ -53,25 +53,25 @@ class MySnsTopicWithSqsdlqStack(Stack):
         )
     snsTopic00kfsolutionsemail003vA2k.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
 
-    eventsRule00ruletrustedadvisro00zBCzW = events.CfnRule(self, 'EventsRule00ruletrustedadvisro00zBCzW',
-          event_bus_name = eventsEventBus00default00hob1r.ref,
-          event_pattern = {
-            'detail-type': [
-              'Trusted Advisor Check Item Refresh Notification',
-            ],
-            'source': [
-              'aws.trustedadvisor',
-            ],
-          },
-          targets = [
-            {
-              'arn': snsTopic00kfsolutionsemail003vA2k.ref,
-              'id': 'trustedadvisro',
-            },
-          ],
-          state = 'ENABLED',
-          name = 'trustedadvisro',
-        )
-    eventsRule00ruletrustedadvisro00zBCzW.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
+    # eventsRule00ruletrustedadvisro00zBCzW = events.CfnRule(self, 'EventsRule00ruletrustedadvisro00zBCzW',
+    #       event_bus_name = eventsEventBus00default00hob1r.ref,
+    #       event_pattern = {
+    #         'detail-type': [
+    #           'Trusted Advisor Check Item Refresh Notification',
+    #         ],
+    #         'source': [
+    #           'aws.trustedadvisor',
+    #         ],
+    #       },
+    #       targets = [
+    #         {
+    #           'arn': snsTopic00kfsolutionsemail003vA2k.ref,
+    #           'id': 'trustedadvisro',
+    #         },
+    #       ],
+    #       state = 'ENABLED',
+    #       name = 'trustedadvisro',
+    #     )
+    # eventsRule00ruletrustedadvisro00zBCzW.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
 
 

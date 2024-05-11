@@ -17,16 +17,11 @@ steps:
 
 - script: |
     sudo npm install -g aws-cdk
-    # npm install
-    # npm run build
-    # Install module pip:
-    #python3 -m ensurepip --default-pip
-    echo Install requirements
     pip install -r requirements.txt
     echo list app
     cdk ls
     #cdk synth
-  displayName: 'npm install and synth'
+  displayName: 'npm install and cdk ls'
 - task: AWSShellScript@1
   inputs:
     awsCredentials: 'AWS-SANDBOX'
