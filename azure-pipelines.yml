@@ -11,7 +11,6 @@ pool:
 
 jobs:  
 - job: preps
-  pool: server
   displayName: Preparations
   steps:
   - task: NodeTool@0
@@ -39,6 +38,7 @@ jobs:
       failOnStandardError: false
     displayName: 'cdk diff'
   - task: ManualValidation@0
+    pool: server
     timeoutInMinutes: 1440 # task times out in 1 day
     inputs:
       notifyUsers: 1robroos@gmail.com
@@ -103,7 +103,7 @@ jobs:
 #   - job: waitForValidation
 #     displayName: wait for external validation
 #     dependsOn: preps
-#     pool: server
+#     pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
 #     timeoutInMinutes: 3600
 #     steps:
 #     - task: ManualValidation@0
