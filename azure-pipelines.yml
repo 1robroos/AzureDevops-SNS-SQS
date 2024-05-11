@@ -7,10 +7,11 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  # Specify a Microsoft-hosted pool using the vmImage property.
 
 jobs:  
 - job: preps
+  pool: server
   displayName: Preparations
   steps:
   - task: NodeTool@0
@@ -57,7 +58,8 @@ jobs:
 
 
     # two jobs solution: checkout also runs twice and npm install needs to run twice . 
-
+# on microsoft hosted agents,  The virtual machine is discarded after one job 
+# (which means any change that a job makes to the virtual machine file system, such as checking out code, will be unavailable to the next job). 
     # Node.js
 # Build a general Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
