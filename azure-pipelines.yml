@@ -23,7 +23,7 @@ steps:
     echo "Installing packages"
     sudo npm install -g aws-cdk
     sudo gem install cfn-nag    
-  displayName: 'Installing  aws cdk and cfn nag'
+  displayName: 'Installing aws cdk and cfn nag'
 
 # - script: |
 #     echo "Installing project dependencies"
