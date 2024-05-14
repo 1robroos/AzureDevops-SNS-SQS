@@ -1,0 +1,147 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "My-SNS-topic-with-SQSDLQ": {
+        "id": "My-SNS-topic-with-SQSDLQ",
+        "path": "My-SNS-topic-with-SQSDLQ",
+        "children": {
+          "SQSQueue00SNSSubscriptionSendFailure0087EhT": {
+            "id": "SQSQueue00SNSSubscriptionSendFailure0087EhT",
+            "path": "My-SNS-topic-with-SQSDLQ/SQSQueue00SNSSubscriptionSendFailure0087EhT",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+              "aws:cdk:cloudformation:props": {
+                "delaySeconds": 0,
+                "maximumMessageSize": 262144,
+                "messageRetentionPeriod": 345600,
+                "queueName": "SNSSubscriptionSendFailure",
+                "receiveMessageWaitTimeSeconds": 0,
+                "sqsManagedSseEnabled": true,
+                "tags": [
+                  {
+                    "key": "purpose",
+                    "value": "receive SNS messages that are not able to be send"
+                  }
+                ],
+                "visibilityTimeout": 60
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+              "version": "2.140.0"
+            }
+          },
+          "SNSTopic00kfsolutionsemail003vA2K": {
+            "id": "SNSTopic00kfsolutionsemail003vA2K",
+            "path": "My-SNS-topic-with-SQSDLQ/SNSTopic00kfsolutionsemail003vA2K",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+              "aws:cdk:cloudformation:props": {
+                "archivePolicy": {},
+                "displayName": "SNS-kfsolutions-email",
+                "fifoTopic": false,
+                "subscription": [
+                  {
+                    "endpoint": "1robroos@gmail.com",
+                    "protocol": "email"
+                  },
+                  {
+                    "endpoint": {
+                      "Fn::GetAtt": [
+                        "SQSQueue00SNSSubscriptionSendFailure0087EhT",
+                        "Arn"
+                      ]
+                    },
+                    "protocol": "sqs"
+                  }
+                ],
+                "topicName": "kfsolutions-email"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+              "version": "2.140.0"
+            }
+          },
+          "bucket123": {
+            "id": "bucket123",
+            "path": "My-SNS-topic-with-SQSDLQ/bucket123",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "My-SNS-topic-with-SQSDLQ/bucket123/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketName": "robroos-testbucket"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.140.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.140.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "My-SNS-topic-with-SQSDLQ/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "My-SNS-topic-with-SQSDLQ/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.140.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "My-SNS-topic-with-SQSDLQ/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.140.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "My-SNS-topic-with-SQSDLQ/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.140.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.140.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.140.0"
+    }
+  }
+}

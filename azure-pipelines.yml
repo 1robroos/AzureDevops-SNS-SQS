@@ -1,133 +1,64 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- master
+  - none
 
 pool:
-  vmImage: 'ubuntu-latest'  # Specify a Microsoft-hosted pool using the vmImage property.
+  vmImage: 'ubuntu-latest'
 
-jobs:  
-- job: preps
-  displayName: Preparations
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '22.0.0'
-    displayName: 'Install Node.js'
+steps:
 
-  - script: |
-      sudo npm install -g aws-cdk
-      pip install -r requirements.txt
-      #cdk synth
-    displayName: 'npm install'
-  - script: |
-      echo list app
-      cdk ls
-    displayName: 'cdk ls'  
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'AWS-SANDBOX'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      inlineScript: 'cdk diff'
-      disableAutoCwd: true
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-      failOnStandardError: false
-    displayName: 'cdk diff'
-  - task: ManualValidation@0
-    pool: server
-    timeoutInMinutes: 1440 # task times out in 1 day
-    inputs:
-      notifyUsers: 1robroos@gmail.com
-      instructions: 'please validate'
-      onTimeout: 'reject' # 'resume'
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'AWS-SANDBOX'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      inlineScript: 'cdk deploy'
-      disableAutoCwd: true
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-      failOnStandardError: false
-    displayName: 'cdk deploy'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '22.0.0'
 
+- task: UseRubyVersion@0
+  inputs:
+    versionSpec: '>= 2.4'
 
+- script: |
+    echo "Installing packages"
+    sudo npm install -g aws-cdk
+    sudo gem install cfn-nag    
+  displayName: 'Installing aws cdk and cfn nag'
 
-    # two jobs solution: checkout also runs twice and npm install needs to run twice . 
-# on microsoft hosted agents,  The virtual machine is discarded after one job 
-# (which means any change that a job makes to the virtual machine file system, such as checking out code, will be unavailable to the next job). 
-    # Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+- script: |
+    echo "Installing project dependencies"
+    sudo npm install
+    sudo npm run build    
+  displayName: 'Installing project dependencies'
 
-# trigger:
-#   - master
-  
-#   pool:
-#     vmImage: 'ubuntu-latest'
-  
-#   jobs:  
-#   - job: preps
-#     displayName: Preparations
-#     steps:
-#     - task: NodeTool@0
-#       inputs:
-#         versionSpec: '22.0.0'
-#       displayName: 'Install Node.js'
-  
-#     - script: |
-#         sudo npm install -g aws-cdk
-#         pip install -r requirements.txt
-#         #cdk synth
-#       displayName: 'npm install'
-#     - script: |
-#         echo list app
-#         cdk ls
-#       displayName: 'cdk ls'  
-#     - task: AWSShellScript@1
-#       inputs:
-#         awsCredentials: 'AWS-SANDBOX'
-#         regionName: 'eu-central-1'
-#         scriptType: 'inline'
-#         inlineScript: 'cdk diff'
-#         disableAutoCwd: true
-#         workingDirectory: '$(System.DefaultWorkingDirectory)'
-#         failOnStandardError: false
-#       displayName: 'cdk diff'
-    
-#   - job: waitForValidation
-#     displayName: wait for external validation
-#     dependsOn: preps
-#     pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
-#     timeoutInMinutes: 3600
-#     steps:
-#     - task: ManualValidation@0
-#       inputs:
-#         notifyUsers: 1robroos@gmail.com
-#         instructions: 'please validate'
-  
-#   - job: afterForValidation
-#     displayName: Do Something After Validation
-#     dependsOn: waitforValidation
-#     steps:
-#     - script: echo Validation Completed!
-#       displayName: 'Run cdk deploy'
-#     - task: AWSShellScript@1
-#       inputs:
-#         awsCredentials: 'AWS-SANDBOX'
-#         regionName: 'eu-central-1'
-#         scriptType: 'inline'
-#         inlineScript: 'cdk deploy'
-#         disableAutoCwd: true
-#         workingDirectory: '$(System.DefaultWorkingDirectory)'
-#         failOnStandardError: false
-#       displayName: 'cdk deploy'
-  
-  
-      
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    scriptType: 'inline'
+    inlineScript: |
+      echo "Running validations"
+      cdk synth -o out
+      cd out
+      fname=$(find *.template.json)
+      echo "Testing output with cfn-nag-scan"
+      cfn_nag_scan --input-path $fname
+  displayName: 'Validating AWS CDK output'
+
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    scriptType: 'inline'
+    inlineScript: |
+      echo "Generating CDK diff file"
+      cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
+      sed -i '1 i\```bash' output.log
+      sed -i -e '$a```' output.log
+  displayName: 'Generating CDK diff file'
+
+# GitHub Comment v0   https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/github-comment-v0?view=azure-pipelines
+# via https://dev.azure.com/1robroos/SNS-SQS/_settings/boards-external-integration
+# Write a comment to your GitHub entity i.e. issue or a pull request (PR).
+- task: GitHubComment@0
+  inputs:
+    gitHubConnection: github-rob-personal # string. Required. GitHub connection (OAuth or PAT). 
+    repositoryName: '$(Build.Repository.Name)' # string. Required. Repository. Default: $(Build.Repository.Name).
+    #id: # string. ID of the github pr/issue. 
+    #comment: "Refer to output.log # string. Comment.
     

@@ -1,8 +1,12 @@
-from aws_cdk import Stack
+from aws_cdk import ( 
+    Stack,
+    aws_s3 as s3,
+    aws_sns as sns,
+    aws_sqs as sqs,
+    RemovalPolicy
+)
 import aws_cdk as cdk
-import aws_cdk.aws_events as events
-import aws_cdk.aws_sns as sns
-import aws_cdk.aws_sqs as sqs
+
 from constructs import Construct
 
 class MySnsTopicWithSqsdlqStack(Stack):
@@ -44,4 +48,12 @@ class MySnsTopicWithSqsdlqStack(Stack):
           topic_name = 'kfsolutions-email',
         )
     snsTopic00kfsolutionsemail003vA2k.cfn_options.deletion_policy = cdk.CfnDeletionPolicy.RETAIN
+
+
+    s3.Bucket(
+      self, 
+      id="bucket123", 
+      bucket_name="robroos-testbucket", # Provide a bucket name here
+      removal_policy=RemovalPolicy.DESTROY 
+    )
 

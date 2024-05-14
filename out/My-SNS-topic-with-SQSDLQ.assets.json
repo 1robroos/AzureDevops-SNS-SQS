@@ -1,0 +1,20 @@
+{
+  "version": "36.0.0",
+  "files": {
+    "edc60f779eb4c82eb7da9fbe55ca1c1ff74a9143942e985fa589e369d3e7302f": {
+      "source": {
+        "path": "My-SNS-topic-with-SQSDLQ.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "969526043371-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-969526043371-eu-central-1",
+          "objectKey": "edc60f779eb4c82eb7da9fbe55ca1c1ff74a9143942e985fa589e369d3e7302f.json",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::969526043371:role/cdk-hnb659fds-file-publishing-role-969526043371-eu-central-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
