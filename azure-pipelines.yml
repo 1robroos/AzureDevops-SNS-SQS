@@ -1,5 +1,10 @@
 trigger:
   - master
+# startput voor je pipeline
+
+pr:
+  - dev
+
 
 pool:
   vmImage: 'ubuntu-latest'
