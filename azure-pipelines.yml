@@ -20,11 +20,11 @@ steps:
     sudo gem install cfn-nag    
   displayName: 'Installing aws cdk and cfn nag'
 
-- script: |
-    echo "Installing project dependencies"
-    sudo npm install
-    sudo npm run build    
-  displayName: 'Installing project dependencies'
+# - script: |
+#     echo "Installing project dependencies"
+#     sudo npm install
+#     sudo npm run build    
+#   displayName: 'Installing project dependencies'
 
 - task: AWSShellScript@1
   inputs:
