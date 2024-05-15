@@ -41,7 +41,7 @@ stages:
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: $(System.DefaultWorkingDirectory)
-        artifactName: cdkarti
+        artifactName: cdk-arti
 
     # # Manual intervention v8
     # # Pause deployment and wait for manual intervention.
