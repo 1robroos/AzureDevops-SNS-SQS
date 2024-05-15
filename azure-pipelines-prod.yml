@@ -5,64 +5,72 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-jobs:
-- job: preps
+stages:
+- stage: DeployToProd  # name of the stage, A-Z, a-z, 0-9, and underscore
+  displayName: DeployToProd  # friendly name to display in the UI
+  #dependsOn: string | [ string ]
+  #condition: string
+  #pool: string | pool
+  #variables: { string: string } | [ variable | variableReference ] 
+    
+  jobs:
+  - job: preps
 
-  steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '22.0.0'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '22.0.0'
 
-  - script: |
-      echo "Installing packages"
-      sudo npm install -g aws-cdk
-    displayName: 'Installing aws cdk'
+    - script: |
+        echo "Installing packages"
+        sudo npm install -g aws-cdk
+      displayName: 'Installing aws cdk'
 
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'AWS-SANDBOX'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      inlineScript: |
-        echo "Generating CDK diff file"
-        cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
-        sed -i '1 i\```bash' output.log
-        sed -i -e '$a```' output.log
-    displayName: 'Generating CDK diff file'
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'AWS-SANDBOX'
+        regionName: 'eu-central-1'
+        scriptType: 'inline'
+        inlineScript: |
+          echo "Generating CDK diff file"
+          cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
+          sed -i '1 i\```bash' output.log
+          sed -i -e '$a```' output.log
+      displayName: 'Generating CDK diff file'
 
-  # # Manual intervention v8
-  # # Pause deployment and wait for manual intervention.
-  # - task: ManualIntervention@8
-  #   inputs:
-  #     instructions: "Make a choice!" # string. Instructions. 
-  #     emailRecipients: 1robroos@gmail.com # string. Notify users. 
-  #     onTimeout: 'reject' # 'reject' | 'resume'. On timeout. Default: reject. Automatically rejects or resumes the manual intervention after it is pending for the specified timeout, or 60 days, whichever is earlier.
-  #   displayName: 'Manual intervention'
+    # # Manual intervention v8
+    # # Pause deployment and wait for manual intervention.
+    # - task: ManualIntervention@8
+    #   inputs:
+    #     instructions: "Make a choice!" # string. Instructions. 
+    #     emailRecipients: 1robroos@gmail.com # string. Notify users. 
+    #     onTimeout: 'reject' # 'reject' | 'resume'. On timeout. Default: reject. Automatically rejects or resumes the manual intervention after it is pending for the specified timeout, or 60 days, whichever is earlier.
+    #   displayName: 'Manual intervention'
 
-- job: waitForValidation
-  displayName: wait for external validation
-  dependsOn: preps
-  pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
-  timeoutInMinutes: 3600
-  steps:
-  - task: ManualValidation@0
-    inputs:
-      notifyUsers: 1robroos@gmail.com
-      instructions: 'please validate'
+  - job: waitForValidation
+    displayName: wait for external validation
+    dependsOn: preps
+    pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
+    timeoutInMinutes: 3600
+    steps:
+    - task: ManualValidation@0
+      inputs:
+        notifyUsers: 1robroos@gmail.com
+        instructions: 'please validate'
 
-- job: afterForValidation
-  displayName: Do Something After Validation
-  dependsOn: waitforValidation
-  steps:
-  - script: echo Validation Completed!
-    displayName: 'Run cdk deploy'
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'AWS-SANDBOX'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      inlineScript: 'cdk deploy'
-      disableAutoCwd: true
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-      failOnStandardError: false
-    displayName: 'cdk deploy'
+  - job: afterForValidation
+    displayName: Do Something After Validation
+    dependsOn: waitforValidation
+    steps:
+    - script: echo Validation Completed!
+      displayName: 'Run cdk deploy'
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'AWS-SANDBOX'
+        regionName: 'eu-central-1'
+        scriptType: 'inline'
+        inlineScript: 'cdk deploy'
+        disableAutoCwd: true
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        failOnStandardError: false
+      displayName: 'cdk deploy'
