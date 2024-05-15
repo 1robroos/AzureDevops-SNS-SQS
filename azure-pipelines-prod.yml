@@ -40,7 +40,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: $(System.DefaultWorkingDirectory)/bin/cdkarti
+        targetPath: $(System.DefaultWorkingDirectory)/cdkarti
         artifactName: cdkarti
 
     # # Manual intervention v8
