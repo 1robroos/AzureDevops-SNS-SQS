@@ -33,14 +33,14 @@ stages:
         regionName: 'eu-central-1'
         scriptType: 'inline'
         inlineScript: |
-          echo " issue cdk diff -v"
-          cdk diff -v
+          echo show dir before
+          ls -ltR
+          # echo " issue cdk diff -v"
+          # cdk diff -v
           echo "Generating CDK diff file"
-          #cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
           cdk diff -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
-         # make it a markdown comment:
-          # sed -i '1 i\```bash' output.log
-          # sed -i -e '$a```' output.log
+          echo show dir after
+          ls -ltR
       displayName: 'Generating CDK diff file'
 
     - task: PublishPipelineArtifact@1
