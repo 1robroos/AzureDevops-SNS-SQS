@@ -29,8 +29,16 @@ steps:
     sudo npm install -g aws-cdk
     #sudo gem install cfn-nag  
     pip install -r requirements.txt  # otherwise error: ModuleNotFoundError: No module named 'aws_cdk'
-    aws sts get-caller-identity
   displayName: 'Installing aws cdk and cfn nag'
+
+
+- task: AWSCLI@1
+  inputs:
+    awsCredentials: 'my-aws-account'
+    regionName: 'eu-central-1'
+    awsCommand: 'sts'
+    awsSubCommand: 'get-caller-identity'
+  displayName: 'aws sts'
 
 # # Testing construct with pytest
 # - script: |
