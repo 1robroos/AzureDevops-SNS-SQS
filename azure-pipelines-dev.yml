@@ -34,6 +34,14 @@ steps:
 #     sudo npm run build    
 #   displayName: 'Installing project dependencies'
 
+
+# Testing construct with pytest
+- script: |
+    echo "Testing construct with pytest"
+    sudo pip install -U pytest
+    sudo python -m pytest
+  displayName: 'Testing construct with pytest'
+
 - task: AWSShellScript@1
   inputs:
     awsCredentials: 'AWS-SANDBOX'
