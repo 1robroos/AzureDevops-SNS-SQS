@@ -67,7 +67,7 @@ steps:
     #awsCredentials: 'AWS-SANDBOX'
     regionName: 'eu-central-1'
     scriptType: 'inline'
-    inlineScript: 'cdk diff'
+    inlineScript: 'cdk diff -v'
     disableAutoCwd: true
     workingDirectory: '$(System.DefaultWorkingDirectory)'
     failOnStandardError: false
