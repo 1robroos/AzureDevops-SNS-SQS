@@ -63,6 +63,8 @@ steps:
 #     onTimeout: 'reject' # 'reject' | 'resume'. On timeout. Default: reject. Automatically rejects or resumes the manual intervention after it is pending for the specified timeout, or 60 days, whichever is earlier.
 #   displayName: 'Manual intervention'
 
+jobs:
+
 - job: waitForValidation
   displayName: wait for external validation
   dependsOn: preps
