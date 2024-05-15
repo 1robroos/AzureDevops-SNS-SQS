@@ -55,7 +55,7 @@ steps:
       fname=$(find *.template.json)
       echo "Testing output with cfn-nag-scan"
       cfn_nag_scan --input-path $fname
-  displayName: 'Validating AWS CDK output'
+  displayName: 'Validating with cfn_nag'
 
 - task: AWSShellScript@1
   inputs:
@@ -67,6 +67,7 @@ steps:
       cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
       sed -i '1 i\```bash' output.log
       sed -i -e '$a```' output.log
+      cat output.log
   displayName: 'Generating CDK diff file'
 
 # onderstaan werkt enkel met een PR of issue.
