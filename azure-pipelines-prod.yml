@@ -32,6 +32,8 @@ stages:
         regionName: 'eu-central-1'
         scriptType: 'inline'
         inlineScript: |
+          echo " issue cdk diff -v"
+          cdk diff -v
           echo "Generating CDK diff file"
           #cdk diff -o out -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
           cdk diff -c aws-cdk:enableDiffNoFail=true --no-color "*" 2>&1 | sed -n '/Resources/,/Outputs/p' | sed 's/├/\+/g; s/│/|/g; s/─/-/g; s/└/`/g' | head -n -1 | tee output.log
@@ -54,38 +56,38 @@ stages:
     #     onTimeout: 'reject' # 'reject' | 'resume'. On timeout. Default: reject. Automatically rejects or resumes the manual intervention after it is pending for the specified timeout, or 60 days, whichever is earlier.
     #   displayName: 'Manual intervention'
 
-  - job: job_waitForValidation
-    displayName: wait for external validation
-    dependsOn: job_preps
-    pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
-    timeoutInMinutes: 3600
-    steps:
-    - task: ManualValidation@0
-      inputs:
-        notifyUsers: 1robroos@gmail.com
-        instructions: 'please validate'
+  # - job: job_waitForValidation
+  #   displayName: wait for external validation
+  #   dependsOn: job_preps
+  #   pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
+  #   timeoutInMinutes: 3600
+  #   steps:
+  #   - task: ManualValidation@0
+  #     inputs:
+  #       notifyUsers: 1robroos@gmail.com
+  #       instructions: 'please validate'
 
-  - job: job_afterForValidation
-    displayName: Do Something After Validation
-    dependsOn: job_waitForValidation
-    steps:
-    - script: echo Validation Completed!
-      displayName: 'A Message after Validation'
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '22.0.0'
-    - script: |
-        echo "Installing packages"
-        sudo npm install -g aws-cdk
-        pip install -r requirements.txt  # otherwise error: ModuleNotFoundError: No module named 'aws_cdk'
-      displayName: 'Installing aws cdk'
-    - task: AWSShellScript@1
-      inputs:
-        awsCredentials: 'my-aws-account'
-        regionName: 'eu-central-1'
-        scriptType: 'inline'
-        inlineScript: 'cdk deploy'
-        disableAutoCwd: true
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
-        failOnStandardError: false
-      displayName: 'cdk deploy'
+  # - job: job_afterForValidation
+  #   displayName: Do Something After Validation
+  #   dependsOn: job_waitForValidation
+  #   steps:
+  #   - script: echo Validation Completed!
+  #     displayName: 'A Message after Validation'
+  #   - task: NodeTool@0
+  #     inputs:
+  #       versionSpec: '22.0.0'
+  #   - script: |
+  #       echo "Installing packages"
+  #       sudo npm install -g aws-cdk
+  #       pip install -r requirements.txt  # otherwise error: ModuleNotFoundError: No module named 'aws_cdk'
+  #     displayName: 'Installing aws cdk'
+  #   - task: AWSShellScript@1
+  #     inputs:
+  #       awsCredentials: 'my-aws-account'
+  #       regionName: 'eu-central-1'
+  #       scriptType: 'inline'
+  #       inlineScript: 'cdk deploy'
+  #       disableAutoCwd: true
+  #       workingDirectory: '$(System.DefaultWorkingDirectory)'
+  #       failOnStandardError: false
+  #     displayName: 'cdk deploy'
