@@ -64,7 +64,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXHwQ3CMAxA0Vl6d0xDOwFdAAp3FIwrTCCBOlGFouyOoKf//hZt32LbuEUNXb15yAXLMTny4BY9F30rDlM4ZM4MGv5zii8h0A7LLpPnBMMUVtX688ga80xcYf9Jtxg2HVqLfXNXETPnkOTJOK79AtAKFluAAAAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXHQQ7CIBBA0bN0D6MU4wHsBbR2bxCnEdGhdpg0hnB3o13991swdg/bxi2s/S3qZ7hCOWfno3ILXwq/GbqRToKCiuk/Q5qCV2yhHMRHzKobaVWtP/fISWaPVR0/+Z5oY8EY2DUPDkHPQjm8EPq1X/o45Y6AAAAA"
    },
    "Metadata": {
     "aws:cdk:path": "My-SNS-topic-with-SQSDLQ/CDKMetadata/Default"

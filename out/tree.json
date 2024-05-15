@@ -31,7 +31,7 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
-              "version": "2.140.0"
+              "version": "2.136.0"
             }
           },
           "SNSTopic00kfsolutionsemail003vA2K": {
@@ -63,7 +63,7 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
-              "version": "2.140.0"
+              "version": "2.136.0"
             }
           },
           "bucket123": {
@@ -81,13 +81,13 @@
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
-                  "version": "2.140.0"
+                  "version": "2.136.0"
                 }
               }
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_s3.Bucket",
-              "version": "2.140.0"
+              "version": "2.136.0"
             }
           },
           "CDKMetadata": {
@@ -99,7 +99,7 @@
                 "path": "My-SNS-topic-with-SQSDLQ/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
-                  "version": "2.140.0"
+                  "version": "2.136.0"
                 }
               }
             },
@@ -113,7 +113,7 @@
             "path": "My-SNS-topic-with-SQSDLQ/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
-              "version": "2.140.0"
+              "version": "2.136.0"
             }
           },
           "CheckBootstrapVersion": {
@@ -121,13 +121,13 @@
             "path": "My-SNS-topic-with-SQSDLQ/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
-              "version": "2.140.0"
+              "version": "2.136.0"
             }
           }
         },
         "constructInfo": {
           "fqn": "aws-cdk-lib.Stack",
-          "version": "2.140.0"
+          "version": "2.136.0"
         }
       },
       "Tree": {
@@ -141,7 +141,7 @@
     },
     "constructInfo": {
       "fqn": "aws-cdk-lib.App",
-      "version": "2.140.0"
+      "version": "2.136.0"
     }
   }
 }
