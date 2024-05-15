@@ -66,7 +66,6 @@ steps:
     awsCredentials: 'AWS-SANDBOX'
     regionName: 'eu-central-1'
     scriptType: 'inline'
-    # inlineScript: 'cdk deploy --ci --require-approval never'
     inlineScript: 'cdk diff'
     disableAutoCwd: true
     workingDirectory: '$(System.DefaultWorkingDirectory)'
