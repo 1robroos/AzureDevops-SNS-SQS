@@ -67,7 +67,7 @@ steps:
 
 - task: AWSCLI@1
   inputs:
-    awsCredentials: 'AWS-SANDBOX'
+    awsCredentials: 'my-aws-account'
     regionName: 'eu-central-1'
     awsCommand: 'cloudformation'
     awsSubCommand: 'list-stacks'
