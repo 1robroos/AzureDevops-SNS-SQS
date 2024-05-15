@@ -27,7 +27,7 @@ steps:
 - script: |
     echo "Installing packages"
     sudo npm install -g aws-cdk
-    #sudo gem install cfn-nag  
+    sudo gem install cfn-nag  
     pip install -r requirements.txt  # otherwise error: ModuleNotFoundError: No module named 'aws_cdk'
   displayName: 'Installing aws cdk and cfn nag'
 
