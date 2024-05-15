@@ -1,9 +1,6 @@
 trigger:
-  - dev
+  - master
 # startput voor je pipeline
-
-# pr:
-#   - dev
 
 
 pool:
