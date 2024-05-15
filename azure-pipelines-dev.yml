@@ -52,6 +52,15 @@ steps:
       cfn_nag_scan --input-path $fname
   displayName: 'Validating with cfn_nag'
 
+- task: AWSCLI@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    awsCommand: 'cdk'
+    awsSubCommand: 'diff'
+  displayName: 'aws cli cdk diff'
+
+
 - task: AWSShellScript@1
   inputs:
     awsCredentials: 'AWS-SANDBOX'
