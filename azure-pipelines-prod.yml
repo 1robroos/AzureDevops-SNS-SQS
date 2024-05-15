@@ -14,7 +14,7 @@ stages:
   #variables: { string: string } | [ variable | variableReference ] 
     
   jobs:
-  - job: job-preps
+  - job: job_preps
 
     steps:
     - task: NodeTool@0
@@ -52,7 +52,7 @@ stages:
     #     onTimeout: 'reject' # 'reject' | 'resume'. On timeout. Default: reject. Automatically rejects or resumes the manual intervention after it is pending for the specified timeout, or 60 days, whichever is earlier.
     #   displayName: 'Manual intervention'
 
-  - job: job-waitForValidation
+  - job: job_waitForValidation
     displayName: wait for external validation
     dependsOn: preps
     pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
@@ -63,7 +63,7 @@ stages:
         notifyUsers: 1robroos@gmail.com
         instructions: 'please validate'
 
-  - job: job-afterForValidation
+  - job: job_afterForValidation
     displayName: Do Something After Validation
     dependsOn: waitforValidation
     steps:
@@ -75,7 +75,7 @@ stages:
     - script: |
         echo "Installing packages"
         sudo npm install -g aws-cdk
-        pip install -r requirements.txt
+        pip install -r requirements.txt  # otherwise error: ModuleNotFoundError: No module named 'aws_cdk'
       displayName: 'Installing aws cdk'
     - task: AWSShellScript@1
       inputs:
