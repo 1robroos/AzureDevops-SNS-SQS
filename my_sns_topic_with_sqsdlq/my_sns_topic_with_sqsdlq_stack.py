@@ -19,7 +19,7 @@ class MySnsTopicWithSqsdlqStack(Stack):
           delay_seconds = 0,
           message_retention_period = 345600,
           maximum_message_size = 262144,
-          visibility_timeout = 60,
+          visibility_timeout = 30,
           queue_name = 'SNSSubscriptionSendFailure',
           tags = [
             {
