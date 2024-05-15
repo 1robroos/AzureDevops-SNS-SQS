@@ -63,7 +63,8 @@ steps:
 
 - task: AWSShellScript@1
   inputs:
-    awsCredentials: 'AWS-SANDBOX'
+    awsCredentials: 'my-aws-account'
+    #awsCredentials: 'AWS-SANDBOX'
     regionName: 'eu-central-1'
     scriptType: 'inline'
     inlineScript: 'cdk diff'
