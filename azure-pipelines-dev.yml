@@ -9,7 +9,7 @@ trigger:
 #   - dev
 
 variables:
-  system.debug: 'true'
+  system.debug: 'false'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -40,35 +40,38 @@ steps:
     awsSubCommand: 'get-caller-identity'
   displayName: 'aws sts'
 
-# # Testing construct with pytest
-# - script: |
-#     echo "Testing construct with pytest"
-#     pip install -r requirements.txt # to prevent ModuleNotFoundError: No module named 'aws_cdk'
-#     pip install -U pytest
-#     python -m pytest
-#   displayName: 'Testing construct with pytest'
+# Testing construct with pytest
+# https://docs.aws.amazon.com/cdk/v2/guide/testing.html
+# https://docs.pytest.org/en/6.2.x/getting-started.html#install-pytest 
 
-# - task: AWSShellScript@1
-#   inputs:
-#     awsCredentials: 'AWS-SANDBOX'
-#     regionName: 'eu-central-1'
-#     scriptType: 'inline'
-#     inlineScript: |
-#       echo "Running validations"
-#       cdk synth -o out
-#       cd out
-#       fname=$(find *.template.json)
-#       echo "Testing output with cfn-nag-scan"
-#       cfn_nag_scan --input-path $fname
-#   displayName: 'Validating with cfn_nag'
+- script: |
+    echo "Testing construct with pytest"
+    pip install -r requirements.txt # to prevent ModuleNotFoundError: No module named 'aws_cdk'
+    pip install -U pytest
+    python -m pytest
+  displayName: 'Testing construct with pytest'
 
-# - task: AWSCLI@1
-#   inputs:
-#     awsCredentials: 'AWS-SANDBOX'
-#     regionName: 'eu-central-1'
-#     awsCommand: 'cloudformation'
-#     awsSubCommand: 'list-stacks'
-#   displayName: 'aws cli list cfn stacks'
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    scriptType: 'inline'
+    inlineScript: |
+      echo "Running validations"
+      cdk synth -o out
+      cd out
+      fname=$(find *.template.json)
+      echo "Testing output with cfn-nag-scan"
+      cfn_nag_scan --input-path $fname
+  displayName: 'Validating with cfn_nag'
+
+- task: AWSCLI@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    awsCommand: 'cloudformation'
+    awsSubCommand: 'list-stacks'
+  displayName: 'aws cli list cfn stacks'
 
 - task: AWSShellScript@1
   inputs:
@@ -77,11 +80,10 @@ steps:
     regionName: 'eu-central-1'
     scriptType: 'inline'
     inlineScript: 'cdk diff -v'
-    # disableAutoCwd: true
-    # workingDirectory: '$(System.DefaultWorkingDirectory)'
-    # failOnStandardError: false
+    disableAutoCwd: true
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    failOnStandardError: false
   displayName: 'cdk diff as in commit de4ea9b2'
-
 
 - task: AWSShellScript@1
   inputs:
