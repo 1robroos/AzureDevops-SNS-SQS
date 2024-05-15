@@ -81,7 +81,7 @@ stages:
     - task: AWSShellScript@1
       inputs:
         #awsCredentials: 'AWS-SANDBOX'
-        awsCredentials: 'github-rob-personal'
+        awsCredentials: 'my-aws-account'
         regionName: 'eu-central-1'
         scriptType: 'inline'
         inlineScript: 'cdk deploy'
