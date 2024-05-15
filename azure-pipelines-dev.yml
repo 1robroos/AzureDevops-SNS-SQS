@@ -1,6 +1,9 @@
 trigger:
-  - dev
-# startput voor je pipeline
+  branches:
+    include:
+      - feature/*
+      - dev
+# startput voor je pipeline. The trigger section specifies that the pipeline will be triggered by changes to branch dev or any branch that starts with feature/ .
 
 # pr:
 #   - dev
