@@ -70,6 +70,21 @@ steps:
       cat output.log
   displayName: 'Generating CDK diff file'
 
+- task: AWSShellScript@1
+  inputs:
+    awsCredentials: 'AWS-SANDBOX'
+    regionName: 'eu-central-1'
+    scriptType: 'inline'
+    inlineScript: |
+      echo "cdk synth"
+      cdk synth
+  displayName: 'cdk synth'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)
+        artifactName: cdk-arti
+
 # onderstaan werkt enkel met een PR of issue.
 # GitHub Comment v0   https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/github-comment-v0?view=azure-pipelines
 # via https://dev.azure.com/1robroos/SNS-SQS/_settings/boards-external-integration
