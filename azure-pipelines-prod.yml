@@ -1,6 +1,10 @@
 trigger:
-  - master
-
+ branches:
+   include:
+     - master
+     - release/*
+# The azure-pipelines-prod.yml file defines a pipeline that is triggered by changes to master and release/* branches. It is used for production deployments.
+     
 pool:
   vmImage: 'ubuntu-latest'
 
