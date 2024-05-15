@@ -68,9 +68,9 @@ steps:
     regionName: 'eu-central-1'
     scriptType: 'inline'
     inlineScript: 'cdk diff -v'
-    disableAutoCwd: true
-    workingDirectory: '$(System.DefaultWorkingDirectory)'
-    failOnStandardError: false
+    # disableAutoCwd: true
+    # workingDirectory: '$(System.DefaultWorkingDirectory)'
+    # failOnStandardError: false
   displayName: 'cdk diff as in commit de4ea9b2'
 
 
