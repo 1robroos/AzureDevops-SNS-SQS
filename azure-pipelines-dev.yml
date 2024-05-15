@@ -38,8 +38,9 @@ steps:
 # Testing construct with pytest
 - script: |
     echo "Testing construct with pytest"
-    sudo pip install -U pytest
-    sudo python -m pytest
+    pip install -r requirements.txt # to prevent ModuleNotFoundError: No module named 'aws_cdk'
+    pip install -U pytest
+    python -m pytest
   displayName: 'Testing construct with pytest'
 
 - task: AWSShellScript@1
