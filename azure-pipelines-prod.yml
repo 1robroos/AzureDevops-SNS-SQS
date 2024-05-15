@@ -54,7 +54,7 @@ stages:
 
   - job: job_waitForValidation
     displayName: wait for external validation
-    dependsOn: preps
+    dependsOn: job_preps
     pool: server #   pool: server # note: the value 'server' is a reserved keyword which indicates this is an agentless job
     timeoutInMinutes: 3600
     steps:
@@ -65,7 +65,7 @@ stages:
 
   - job: job_afterForValidation
     displayName: Do Something After Validation
-    dependsOn: waitforValidation
+    dependsOn: job_waitForValidation
     steps:
     - script: echo Validation Completed!
       displayName: 'A Message after Validation'
