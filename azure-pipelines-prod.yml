@@ -7,7 +7,7 @@ pool:
 
 stages:
 - stage: DeployToProd  # name of the stage, A-Z, a-z, 0-9, and underscore
-  displayName: DeployToProd  # friendly name to display in the UI
+  displayName: Stage-DeployToProd  # friendly name to display in the UI
   #dependsOn: string | [ string ]
   #condition: string
   #pool: string | pool
@@ -64,6 +64,13 @@ stages:
     steps:
     - script: echo Validation Completed!
       displayName: 'Run cdk deploy'
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '22.0.0'
+    - script: |
+        echo "Installing packages"
+        sudo npm install -g aws-cdk
+      displayName: 'Installing aws cdk'
     - task: AWSShellScript@1
       inputs:
         awsCredentials: 'AWS-SANDBOX'
