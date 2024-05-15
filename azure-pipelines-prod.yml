@@ -80,7 +80,8 @@ stages:
       displayName: 'Installing aws cdk'
     - task: AWSShellScript@1
       inputs:
-        awsCredentials: 'AWS-SANDBOX'
+        #awsCredentials: 'AWS-SANDBOX'
+        awsCredentials: 'github-rob-personal'
         regionName: 'eu-central-1'
         scriptType: 'inline'
         inlineScript: 'cdk deploy'
